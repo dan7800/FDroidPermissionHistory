@@ -1,0 +1,8 @@
+select amc.appID, ampj.commit_ID, ampj.Permission_ID, Author_Name, author_email, commit_message, alteredDate, Permission, isDangerous,  cpv.PercentCommitter as percentCommitter
+from Android_Manifest_permission_join ampj
+inner join Android_Manifest_CommitInfo amc on amc.commit_ID = ampj.commit_ID
+inner join android_Manifest_permission amp on amp.permission_ID = ampj.permission_ID
+inner join appID_join_view ajv on ajv.amaAPPID = amc.AppID
+inner join Android_Manifest_appinfo ama on ama.appID = amc.AppID
+inner join CommitterPercentage_view cpv on  ajv.appdataappid = cpv.appID and author_email = trimmedemail
+order by altereddate asc
