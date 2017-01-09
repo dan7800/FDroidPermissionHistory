@@ -61,8 +61,8 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(658, 20);
             this.textBox1.TabIndex = 2;
-            this.textBox1.Text = "C:\\Users\\Admin\\Documents\\Visual Studio 2017\\Projects\\AndroidPermissionReader\\Andr" +
-    "oidPermissionReader\\sourceData";
+            this.textBox1.Text = "C:\\Users\\Admin\\Source\\Repos\\FDroidPermissionHistory\\code\\AndroidPermissionReader\\" +
+    "sourceData";
             // 
             // Form1
             // 

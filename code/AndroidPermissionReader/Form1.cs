@@ -34,7 +34,7 @@ namespace AndroidPermissionReader
             logFile = string.Format("permission_history_{0}.csv", DateTime.Now.ToFileTime().ToString());
             using (StreamWriter w = File.AppendText(logFile))
             {
-                w.WriteLine("AppID;CommitID;PermissionID;AuthorName;AuthorEmail;AlteredDate;Permission;ActionType;isDangerous;PercentCommitter");
+                w.WriteLine("AppID;CommitID;PermissionID;AuthorName;AuthorEmail;AlteredDate;AlteredDateTicks;Permission;ActionType;isDangerous;PercentCommitter");
             }
 
             sourceTable = new DataTable();
@@ -44,6 +44,7 @@ namespace AndroidPermissionReader
             sourceTable.Columns.Add(new DataColumn("AuthorName", typeof(string)));
             sourceTable.Columns.Add(new DataColumn("AuthorEmail", typeof(string)));
             sourceTable.Columns.Add(new DataColumn("AlteredDate", typeof(DateTime)));
+            sourceTable.Columns.Add(new DataColumn("AlteredDateTicks", typeof(long)));
             sourceTable.Columns.Add(new DataColumn("Permission", typeof(string)));
             sourceTable.Columns.Add(new DataColumn("ActionType", typeof(string)));
             sourceTable.Columns.Add(new DataColumn("isDangerous", typeof(int)));
@@ -70,17 +71,18 @@ namespace AndroidPermissionReader
                 row[3] = item.AuthorName;
                 row[4] = item.AuthorEmail;
                 row[5] = item.AlteredDate;
-                row[6] = item.Permission;
-                row[7] = item.Action.ToString();
-                row[8] = item.isDangerous;
-                row[9] = item.PercentCommitter;
+                row[6] = item.AlteredDate.Ticks;
+                row[7] = item.Permission;
+                row[8] = item.Action.ToString();
+                row[9] = item.isDangerous;
+                row[10] = item.PercentCommitter;
 
                 sourceTable.Rows.Add(row);
 
                 using (StreamWriter w = File.AppendText(logFile))
                 {
-                    w.WriteLine("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9}",
-                        item.AppID, item.CommitID, item.PermissionID, item.AuthorName, item.AuthorEmail, item.AlteredDate, item.Permission, item.Action.ToString(), item.isDangerous, item.PercentCommitter);
+                    w.WriteLine("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10}",
+                        item.AppID, item.CommitID, item.PermissionID, item.AuthorName, item.AuthorEmail, item.AlteredDate, item.AlteredDate.Ticks, item.Permission, item.Action.ToString(), item.isDangerous, item.PercentCommitter);
                 }
             }
 
@@ -170,7 +172,7 @@ namespace AndroidPermissionReader
                             {
                                 historyItem = new PermissionHistory();
                                 historyItem.AppID = item.AppID;
-                                historyItem.CommitID = item.CommitID;
+                                historyItem.CommitID = current[0].CommitID;
                                 historyItem.AlteredDate = current[0].AlteredDate;
                                 historyItem.PermissionID = item.PermissionID;
                                 historyItem.isDangerous = item.isDangerous;
@@ -178,7 +180,7 @@ namespace AndroidPermissionReader
                                 historyItem.AuthorEmail = current[0].AuthorEmail;
                                 historyItem.CommitMessage = current[0].CommitMessage;
                                 historyItem.Permission = item.Permission;
-                                historyItem.PercentCommitter = item.PercentCommitter;
+                                historyItem.PercentCommitter = current[0].PercentCommitter;
                                 historyItem.Action = PermissionHistory.ActionType.REMOVE;
 
                                 historyList.Add(historyItem);
